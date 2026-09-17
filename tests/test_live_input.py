@@ -70,6 +70,14 @@ class TestTextMode:
     def test_enter(self, pipe):
         assert _key(pipe, b"\r", text=True) == "key:enter"
 
+    def test_tab_is_an_editing_key(self, pipe):
+        assert _key(pipe, b"\t", text=True) == "key:tab"
+
+    def test_ctrl_c_quits_even_while_typing(self, pipe):
+        assert _key(pipe, b"\x03", text=True) == "quit"
+        os.write(pipe[1], b"\x03")
+        assert _read_key(pipe[0]) == "quit"
+
     def test_other_control_bytes_dropped(self, pipe):
         assert _key(pipe, b"\x01", text=True) is None  # ctrl-A
 

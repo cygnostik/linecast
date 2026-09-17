@@ -217,6 +217,18 @@ def _frame(now, cols, rows, lang="en", **kwargs):
 
 
 class TestFrame:
+    def test_explicit_size_and_banner_suppression_are_local(self, monkeypatch):
+        """Embedding can size one frame without changing sky module state."""
+        size_hook, banner_hook = sky.get_terminal_size, sky.install_banner
+        monkeypatch.setenv("LINECAST_TEMP", "1")
+        out = render(NIGHT, LAT, LNG, _runtime(), View(180, 30, 110, 2),
+                     size=(80, 27), show_banner=False,
+                     location_label="Westbrook", today=NIGHT.date())
+        assert len(out.splitlines()) == 25  # 24 image rows plus status
+        assert "pip install linecast" not in out
+        assert sky.get_terminal_size is size_hook
+        assert sky.install_banner is banner_hook
+
     def test_snapshot_80x24(self):
         out = _strip(_frame(NIGHT, 80, 24))
         path = SNAPSHOTS / "sky_80x24.txt"

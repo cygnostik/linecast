@@ -1,0 +1,41 @@
+{
+  "provenance": {
+    "source": "JPL Horizons API",
+    "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "query": "EPHEM_TYPE=VECTORS; CENTER=500@10 (Sun); REF_PLANE=ECLIPTIC; REF_SYSTEM=J2000; CAL_TYPE=GREGORIAN; geometric; TDB; KM-S converted by /149597870.7"
+  },
+  "samples": [
+    {
+      "id": "earth",
+      "date": "1700-01-01T12:00:00Z",
+      "x": -0.2613828001427568,
+      "y": 0.9477957293958997,
+      "z": 0.0006348235458890843,
+      "toleranceAU": 0.05
+    },
+    {
+      "id": "jupiter",
+      "date": "1700-01-01T12:00:00Z",
+      "x": 1.3034069435946727,
+      "y": -5.021283982711642,
+      "z": -0.009639050471779992,
+      "toleranceAU": 0.05
+    },
+    {
+      "id": "neptune",
+      "date": "2200-01-01T12:00:00Z",
+      "x": 27.77519759170751,
+      "y": 10.857693916299874,
+      "z": -0.8640421876998027,
+      "toleranceAU": 0.05
+    },
+    {
+      "id": "pluto",
+      "date": "2900-01-01T12:00:00Z",
+      "x": 4.3358474136373735,
+      "y": 45.303572869426695,
+      "z": -6.08376174625858,
+      "toleranceAU": 0.1
+    }
+  ]
+}

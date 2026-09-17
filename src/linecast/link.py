@@ -1,10 +1,9 @@
-"""Give the six commands their short names, as links to the linecast binary.
+"""Give the eight visual commands their short names, as links to linecast.
 
 Usage: linecast link [--dir DIR]
        linecast link --remove [--dir DIR]
 
-2.0 installs only `linecast`; `weather`, `sunshine`, `moon`, `tides`,
-`radar` and `maps` are common words that other programs also claim.
+2.0 installs only `linecast`; the visual command names are optional links.
 The binary runs as the command it is invoked by, so a link named
 `moon` beside it is the moon command.  This makes those links, next
 to the binary unless --dir says otherwise, and never touches a file
@@ -19,7 +18,7 @@ import sys
 from linecast import _runtime
 from linecast._runtime import VersionAction
 
-SHORT_NAMES = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps")
+SHORT_NAMES = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps", "orrery")
 
 
 def _binary():

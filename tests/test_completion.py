@@ -22,6 +22,7 @@ class CompletionScriptTests(unittest.TestCase):
         script = render_completion("nu")
         self.assertEqual(script, render_completion("nushell"))
         self.assertIn('export extern "linecast"', script)
+        self.assertIn('export extern "linecast orrery"', script)
         self.assertIn('export extern "linecast weather"', script)
         self.assertIn('export extern "linecast tides"', script)
         self.assertIn('export extern "linecast sunshine"', script)
@@ -36,6 +37,7 @@ class CompletionScriptTests(unittest.TestCase):
         self.assertIn('export extern "sunshine"', script)
         self.assertIn('export extern "moon"', script)
         self.assertIn('export extern "radar"', script)
+        self.assertIn('export extern "orrery"', script)
         self.assertIn('export extern "maps"', script)
         self.assertIn('export extern "location"', script)
         self.assertIn('export extern "units"', script)
@@ -47,7 +49,7 @@ class CompletionScriptTests(unittest.TestCase):
         self.assertIn('--lang', script)
         # --help and -h must be omitted so Nushell does not hijack help display
         self.assertNotIn('--help', script)
-        self.assertNotIn('-h', script)
+        self.assertNotRegex(script, r"(?<![A-Za-z])-h(?![A-Za-z])")
 
     def test_bash_completion_includes_namespace_and_standalone_commands(self):
         script = render_completion("bash")
@@ -57,18 +59,22 @@ class CompletionScriptTests(unittest.TestCase):
         self.assertIn("complete -F _linecast_complete_sunshine sunshine", script)
         self.assertIn("complete -F _linecast_complete_moon moon", script)
         self.assertIn("complete -F _linecast_complete_radar radar", script)
+        self.assertIn("complete -F _linecast_complete_maps maps", script)
+        self.assertIn("complete -F _linecast_complete_orrery orrery", script)
 
     def test_zsh_completion_includes_namespace_and_standalone_commands(self):
         script = render_completion("zsh")
-        self.assertIn("compdef _linecast linecast weather sunshine moon sky tides radar maps",
-                      script)
+        self.assertIn(
+            "compdef _linecast linecast weather sunshine moon sky tides radar maps orrery",
+            script,
+        )
         self.assertIn("_linecast_complete_command", script)
 
     def test_fish_completion_includes_namespace_and_standalone_commands(self):
         script = render_completion("fish")
         self.assertIn(
             "complete -c linecast -f -n '__fish_use_subcommand' "
-            "-a 'weather sunshine moon sky tides radar maps location language units clock "
+            "-a 'weather sunshine moon sky tides radar maps orrery location language units clock "
             "week icons calendar culture link doctor completion'",
             script,
         )

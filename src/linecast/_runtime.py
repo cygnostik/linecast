@@ -577,6 +577,12 @@ def sky_parser():
     return p
 
 
+def orrery_parser():
+    """Return Orrery's native parser for generated shell completions."""
+    from linecast.orrery import build_parser
+    return build_parser()
+
+
 def radar_parser():
     p = _base_parser("linecast radar",
                       "Terminal weather radar over a braille basemap (US + global)")

@@ -161,6 +161,16 @@ def test_native_and_orrery_palettes_are_per_render_and_footer_is_properdyn():
     assert "ORRERY.ProDyn.ai" in text
 
 
+def test_canvas_defaults_follow_the_selected_palette():
+    palette = render.Palette(
+        (1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12),
+        (13, 14, 15), (16, 17, 18), (19, 20, 21), (22, 23, 24), {},
+    )
+    canvas = render.Canvas(1, 1, palette)
+    canvas.put(0, 0, "x")
+    assert canvas.cells[0][0] == ("x", palette.ivory, palette.field)
+
+
 def test_json_and_print_are_static_offline_and_do_not_write_config():
     config_dir = Path(os.environ["LINECAST_CONFIG_DIR"])
     before = sorted(config_dir.rglob("*"))

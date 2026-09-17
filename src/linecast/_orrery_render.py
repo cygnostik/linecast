@@ -102,19 +102,22 @@ class Canvas:
             for _ in range(height)
         ]
 
-    def put(self, x, y, char, ink=IVORY, paper=FIELD):
+    def put(self, x, y, char, ink=None, paper=None):
+        ink = self.palette.ivory if ink is None else ink
+        paper = self.palette.field if paper is None else paper
         x, y = int(x), int(y)
         if 0 <= x < self.width and 0 <= y < self.height:
             self.cells[y][x] = (char, ink, paper)
 
-    def text(self, x, y, text, ink=IVORY, paper=FIELD):
+    def text(self, x, y, text, ink=None, paper=None):
         for i, char in enumerate(text):
             self.put(x + i, y, char, ink, paper)
 
-    def fill(self, x, y, w, h, ink=FIELD):
+    def fill(self, x, y, w, h, ink=None):
+        ink = self.palette.field if ink is None else ink
         for row in range(max(0, y), min(self.height, y + h)):
             for col in range(max(0, x), min(self.width, x + w)):
-                self.put(col, row, " ", IVORY, ink)
+                self.put(col, row, " ", self.palette.ivory, ink)
 
     def framebuffer(self, x, y, fb):
         for row in range(fb.graph_h):

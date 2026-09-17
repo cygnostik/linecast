@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import math
 import re
+import linecast
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
@@ -580,7 +581,7 @@ def render_frame(
     note = state.note
     if not note:
         note = (
-            "Keplerian model · sizes illustrative · Linecast 2.6.1"
+            f"Keplerian model · sizes illustrative · Linecast {linecast.__version__}"
             if state.view == "orbit"
             else "Real sky / local catalogues · stars emerge after twilight · same UTC"
         )

@@ -157,6 +157,17 @@ The sky has been drawn many ways. Press `t` for a list of twenty-two traditions 
   <img src="https://raw.githubusercontent.com/ashuttl/linecast/main/screenshots/sky-hawaiian.png" width="49%" alt="the same January sky in the Hawaiian tradition, with the star compass along the horizon">
 </p>
 
+### Orrery
+
+`linecast orrery` draws heliocentric orbits, selectable planets and Pluto, with simulated time and a linked view through the existing sky renderer. Terminal-theme colours are the default; `--theme orrery` selects its dark/cyan palette. `--loop` wraps the supported date range. Observing coordinates are explicit or inferred only with consent, and never saved.
+
+```bash
+linecast orrery --theme orrery --loop
+linecast orrery --view sky --location=51.48,0
+```
+
+[Controls, visuals, and model limits](docs/orrery.md).
+
 ### Tides
 
 `tides` draws the tide curve across several days and marks the highs, the lows, and the predicted water level now. Scroll to move through time.

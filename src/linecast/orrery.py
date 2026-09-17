@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Orrery — a small, offline astronomical instrument powered by Linecast.
 
-Run ``python app.py --help``. All displayed clocks are UTC. The orbital
+Run ``linecast orrery --help``. All displayed clocks are UTC. The orbital
 model is heliocentric; the adjacent sky is Linecast's observer-centred model.
 """
 
@@ -15,13 +15,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
-try:
-    from linecast._live import LiveApp
-except ImportError as exc:
-    raise SystemExit(
-        "Orrery needs the existing Linecast 2.6.1 Python environment. "
-        "Run launch.py, or run app.py with Linecast's Python interpreter."
-    ) from exc
+from linecast._live import LiveApp
 from linecast._framebuffer import get_terminal_size
 from linecast._orrery_astronomy import (
     BODIES,
@@ -31,7 +25,7 @@ from linecast._orrery_astronomy import (
     validate_date,
     utc_now,
 )
-from linecast._runtime import RuntimeConfig
+from linecast._runtime import RuntimeConfig, VersionAction
 from linecast._i18n import LANGUAGE_CODES
 
 BODY_IDS = tuple(body["id"] for body in BODIES)
@@ -286,6 +280,8 @@ class OrreryApp(LiveApp):
             self.help_open = False
             self._last_tick = time.monotonic()
             return True
+        if action in ("char:q", "char:Q"):
+            return "quit"
         if action == "quit":
             return False
         if action == "escape":
@@ -498,10 +494,12 @@ class OrreryApp(LiveApp):
 
 def build_parser():
     parser = argparse.ArgumentParser(
+        prog="linecast orrery",
         description="Orrery — offline solar-system instrument, powered by Linecast.",
         epilog=("UTC everywhere. ISO dates without an offset mean UTC. Location lookup is "
                 "never used unless --infer-location or g is explicitly confirmed."),
     )
+    parser.add_argument("--version", action=VersionAction)
     output = parser.add_mutually_exclusive_group()
     output.add_argument(
         "--print",

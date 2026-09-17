@@ -5,6 +5,7 @@ description = "Weather, tides, the sun, the moon, and maps, drawn for the termin
 authors = [{name = "Andrew Shuttleworth Fowler"}]
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "THIRD-PARTY-NOTICES.md"]
 requires-python = ">=3.10"
 keywords = ["weather", "radar", "terminal", "cli", "tides", "solar", "moon", "maps", "orrery", "braille", "true-color"]
 classifiers = [
@@ -45,9 +46,6 @@ build-backend = "hatchling.build"
 packages = ["src/linecast"]
 # The data ships regardless of any ignore rule; CI checks the built wheel for it.
 artifacts = ["src/linecast/data/*"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"THIRD-PARTY-NOTICES.md" = "THIRD-PARTY-NOTICES.md"
 
 [tool.hatch.build.targets.sdist]
 # Keep the sdist lean: screenshots alone are ~12 MB, and the Homebrew

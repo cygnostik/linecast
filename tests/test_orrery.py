@@ -31,6 +31,20 @@ def frame_lines(text):
     return text.splitlines()
 
 
+def test_footer_uses_installed_linecast_version():
+    with patch("linecast.__version__", "9.8.7"):
+        text = OrreryApp(State(moment=INSTANT, playing=False), 120, 40).render_static()
+    assert "Linecast 9.8.7" in text
+
+
+def test_native_version_flag(capsys):
+    from linecast import __version__
+    with pytest.raises(SystemExit) as stopped:
+        build_parser().parse_args(["--version"])
+    assert stopped.value.code == 0
+    assert __version__ in capsys.readouterr().out
+
+
 def test_native_public_api_and_iso_dates():
     assert parse_date("2026-09-16") == datetime(2026, 9, 16, tzinfo=timezone.utc)
     assert parse_date("2026-09-16T02:00:00+02:00") == datetime(2026, 9, 16, tzinfo=timezone.utc)
@@ -52,6 +66,15 @@ def test_static_frames_are_reproducible_and_year_one_is_zero_padded():
             assert any("UTC" in line for line in frame_lines(first))
     ancient = OrreryApp(State(moment=MIN_DATE, playing=False), 80, 24).render_static()
     assert "0001-01-01" in ancient
+
+
+@pytest.mark.parametrize("key", ["char:q", "char:Q"])
+def test_printable_quit_requests_live_loop_exit(key):
+    app = OrreryApp(State(moment=INSTANT, playing=False), 80, 24)
+    assert app.intercept(key) == "quit"
+    app.location_edit = True
+    assert app.intercept(key) is True
+    assert app.location_text == key[5:]
 
 
 def test_controls_cover_selection_loop_view_and_limits():

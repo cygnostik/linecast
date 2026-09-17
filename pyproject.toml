@@ -5,8 +5,9 @@ description = "Weather, tides, the sun, the moon, and maps, drawn for the termin
 authors = [{name = "Andrew Shuttleworth Fowler"}]
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "THIRD-PARTY-NOTICES.md"]
 requires-python = ">=3.10"
-keywords = ["weather", "radar", "terminal", "cli", "tides", "solar", "moon", "maps", "braille", "true-color"]
+keywords = ["weather", "radar", "terminal", "cli", "tides", "solar", "moon", "maps", "orrery", "braille", "true-color"]
 classifiers = [
     "Environment :: Console",
     "Topic :: Utilities",
@@ -29,8 +30,8 @@ Homepage = "https://github.com/ashuttl/linecast"
 Issues = "https://github.com/ashuttl/linecast/issues"
 
 # Only `linecast` is installed. The short names (weather, sunshine,
-# moon, tides, radar, maps) are common words that other packages also
-# claim — /usr/bin/sunshine belongs to the Sunshine streaming server
+# moon, tides, radar, maps, orrery) are optional links; common words that
+# other packages also claim — /usr/bin/sunshine belongs to the Sunshine server
 # where it is installed (issue #20) — so they are left to the user: the
 # binary dispatches on argv[0], and a symlink or alias named `weather`
 # runs the weather command.

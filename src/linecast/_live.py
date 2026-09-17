@@ -365,6 +365,11 @@ def _read_key(fd, text=False):
                 }.get(b3)
         return 'escape'
 
+    # cbreak delivers ETX for Ctrl-C on every platform.  It remains the
+    # application's quit action even when a text field owns printable input.
+    if b == b'\x03':
+        return 'quit'
+
     if text:
         # Free-text capture: editing keys first, then any printable
         # character (assembling UTF-8 continuations), control bytes dropped.
@@ -372,6 +377,8 @@ def _read_key(fd, text=False):
             return 'key:backspace'
         if b in (b'\r', b'\n'):
             return 'key:enter'
+        if b == b'\t':
+            return 'key:tab'
         if b == b'\x15':  # ctrl-U
             return 'key:kill'
         o = b[0]
@@ -399,10 +406,6 @@ def _read_key(fd, text=False):
             return None
 
     if b in (b'q', b'Q'):
-        return 'quit'
-    # On Windows cbreak turns off the console's own Ctrl-C handling, so
-    # the keystroke arrives as ETX instead of a KeyboardInterrupt.
-    if b == b'\x03':
         return 'quit'
     if b in (b'o', b'O'):
         return 'open'
@@ -686,10 +689,12 @@ def live_loop(render_fn, interval=60, mouse=False, on_open=None, scroll_step=15,
                 drag_start = None
                 return 'repaint'
             help_closed = was_helping and not help_panel.open
-        if (intercept is not None and action is not None
-                and not isinstance(action, tuple)
-                and intercept(action)):
-            return 'repaint'
+        if intercept is not None and action is not None and not isinstance(action, tuple):
+            intercepted = intercept(action)
+            if intercepted == 'quit':
+                return 'quit'
+            if intercepted:
+                return 'repaint'
         if action == 'quit':
             if active_alert is not None:
                 active_alert = None
@@ -996,7 +1001,8 @@ class LiveApp:
 
     def intercept(self, action):
         """Every decoded key before the loop's own handling; truthy
-        consumes it and repaints — how a panel takes the arrows."""
+        consumes it and repaints — how a panel takes the arrows. Return
+        'quit' to request a clean exit through the loop's normal teardown."""
         return False
 
     def on_click(self, col, row):

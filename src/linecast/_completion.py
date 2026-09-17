@@ -41,10 +41,10 @@ LANG_CODES = (
 SHELLS = ("bash", "zsh", "fish", "nu", "nushell")
 
 # The argparse-driven commands, in the order their flags are emitted.
-COMMANDS = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps")
+COMMANDS = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps", "orrery")
 
 GLOBAL_FLAGS = ("--help", "-h", "--version", "-v")
-TOP_LEVEL_COMMANDS = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps",
+TOP_LEVEL_COMMANDS = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps", "orrery",
                       "location", "language", "units", "clock", "week", "icons",
                       "calendar",
                       "culture", "link", "doctor",
@@ -161,13 +161,14 @@ def _all_command_flags():
 
 
 def _value_lists(flags_by_command):
-    """{flag name: values} for every flag with a value list, in the
-    order the flags are first met."""
+    """{flag name: values} merged across commands that share an option."""
     lists = {}
     for flags in flags_by_command.values():
         for flag in flags:
             if flag.values is not None and flag.name not in lists:
                 lists[flag.name] = flag.values
+            elif flag.values is not None:
+                lists[flag.name] = tuple(dict.fromkeys((*lists[flag.name], *flag.values)))
     return lists
 
 
@@ -395,7 +396,7 @@ _linecast_complete() {{
 
   cmd="${{COMP_WORDS[1]}}"
   case "$cmd" in
-    weather|tides|sunshine|moon|sky|radar|maps|location|language|units|clock|week|icons|calendar|culture|link|doctor|completion)
+    orrery|weather|tides|sunshine|moon|sky|radar|maps|location|language|units|clock|week|icons|calendar|culture|link|doctor|completion)
       _linecast_complete_command "$cmd"
       ;;
   esac
@@ -588,7 +589,7 @@ _linecast() {{
     fi
     cmd="${{words[2]}}"
     case "$cmd" in
-      weather|tides|sunshine|moon|sky|radar|maps|location|language|units|clock|week|icons|calendar|culture|link|doctor|completion)
+      orrery|weather|tides|sunshine|moon|sky|radar|maps|location|language|units|clock|week|icons|calendar|culture|link|doctor|completion)
         _linecast_complete_command "$cmd"
         ;;
     esac

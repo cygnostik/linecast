@@ -11,6 +11,7 @@ linecast {version} — weather, sunlight, the moon, the sky, tides, radar, and m
   linecast sunshine    The sun's arc across the sky, dawn to dusk, or the whole year
   linecast moon        The moon as it looks tonight, its rise and set, and a month calendar
   linecast sky         The stars, planets, and Milky Way over you, as you would see them
+  linecast orrery      An offline heliocentric solar-system instrument and observer sky
   linecast tides       Tide chart from the nearest station, or a global model where there is none
   linecast radar       Weather radar over a map, the last hour and the next
   linecast maps        Street maps, hillshaded terrain, and routes
@@ -65,6 +66,7 @@ COMMANDS = {
     "sunshine": "linecast.sunshine",
     "moon": "linecast.moon",
     "sky": "linecast.sky",
+    "orrery": "linecast.orrery",
     "tides": "linecast.tides",
     "radar": "linecast.radar",
     "maps": "linecast.maps",
@@ -88,7 +90,7 @@ COMMANDS = {
 # distro packages that link or copy the binary under a short name. Only
 # these dispatch: the utility commands (location, units, doctor) have no
 # standalone spelling to honour.
-STANDALONE = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps")
+STANDALONE = ("weather", "sunshine", "moon", "sky", "tides", "radar", "maps", "orrery")
 
 
 def _run(cmd, args):

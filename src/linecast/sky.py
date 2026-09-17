@@ -733,16 +733,22 @@ def _screen_up_deg(v_cam, cam, f, cx, cy):
 
 def render(now_local, lat, lng, runtime, view, fullscreen=False,
            offset_minutes=0, mouse_pos=None, location_label="", speed=None,
-           today=None):
+           today=None, size=None, show_banner=None):
     """One frame of the sky.
 
     *view* says where the observer looks; *speed* is the live view's
     play rate in seconds per second, or None; *today* is the user's own
     date, for the clock's weekday. Returns the frame, with the pointer's
-    chip floating over it when the pointer rests on something.
+    chip floating over it when the pointer rests on something. *size* may
+    provide (columns, rows) for an embedding; *show_banner* suppresses the
+    install hint when false. Leaving either as None preserves terminal
+    sizing and the historical banner behavior.
     """
-    cols, rows = get_terminal_size()
-    hint = install_banner()
+    # `size` and `show_banner` are per-frame overrides for callers embedding
+    # the renderer.  None deliberately keeps the historical terminal and
+    # install-banner behavior, including their module-level hooks.
+    cols, rows = size if size is not None else get_terminal_size()
+    hint = install_banner() if show_banner is None or show_banner else ""
     graph_w = max(20, cols)
     reserve = (1 if hint else 0) + (0 if fullscreen else 3)
     graph_h = max(6, rows - reserve)

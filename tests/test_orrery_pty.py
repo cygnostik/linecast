@@ -37,6 +37,12 @@ def test_native_q_exits_and_restores_terminal():
         except SystemExit as stopped:
             code = stopped.code or 0
         after = termios.tcgetattr(0)
+        # XNU sets PENDIN when restoring ICANON: pending-input state, not
+        # a changed mode. Compare every actual setting, excluding only that
+        # kernel-generated bit on Darwin (xnu/bsd/kern/tty.c, ttioctl).
+        if sys.platform == 'darwin':
+            original[3] &= ~termios.PENDIN
+            after[3] &= ~termios.PENDIN
         restored = after == original
         print('ORRERY_TTY_RESTORED=' + str(restored), flush=True)
         if not restored:

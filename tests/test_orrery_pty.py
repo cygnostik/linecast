@@ -36,8 +36,14 @@ def test_native_q_exits_and_restores_terminal():
             runpy.run_module('linecast', run_name='__main__')
         except SystemExit as stopped:
             code = stopped.code or 0
-        restored = termios.tcgetattr(0) == original
+        after = termios.tcgetattr(0)
+        restored = after == original
         print('ORRERY_TTY_RESTORED=' + str(restored), flush=True)
+        if not restored:
+            print('ORRERY_TTY_DIFF=' + repr([
+                (i, before, end) for i, (before, end)
+                in enumerate(zip(original, after)) if before != end
+            ]), flush=True)
         raise SystemExit(code)
     """)
     child = subprocess.Popen(
@@ -68,7 +74,7 @@ def test_native_q_exits_and_restores_terminal():
                 break
         assert sent, "native command never entered its live terminal"
         assert child.wait(timeout=1) == 0, "q must request a clean exit"
-        assert b"ORRERY_TTY_RESTORED=True" in output
+        assert b"ORRERY_TTY_RESTORED=True" in output, bytes(output[-2400:])
         assert b"\x1b[?1049l" in output
         assert b"Traceback" not in output
     finally:
